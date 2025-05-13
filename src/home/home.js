@@ -1,14 +1,19 @@
 import React from "react";
 // import {  Link } from 'react-router-dom';
 import '../home/home.css'
+import {  useNavigate } from 'react-router-dom';
 
 import logo from "../asset/Mn11.png"; // Replace with your logo image
 import statue from "../asset/M1.png"; // Replace with your Lady Justice image
 // import About from "./about/about";
 
 
+  
+
 
 function App() {
+  const Navigate = useNavigate();
+
   return (
     <div className="container">
       <header className="header">
@@ -21,7 +26,7 @@ function App() {
           <a href="/About">About</a> 
           <a href="#practice">Practice Areas</a>
           <a href="#partners">Partners</a>
-          <a href="#bookconsult">Free Consultation</a>
+          <a href="/profile">Profile</a>
           <a href="#csr">Corporate Social Responsibility</a>
           <button className="contact-button">Sign In</button>
         </nav>
@@ -34,7 +39,7 @@ function App() {
           <h1 className="main-heading">
             We Delivered Efficient <br /> And Exceptional <br /> Legal Services
           </h1>
-          <button className="hero-button">Contact Us</button>
+          <button className="hero-button" onClick={()=> Navigate('/contact')}>Contact Us</button>
         </div>
 
         <div className="hero-image">
@@ -44,5 +49,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

@@ -1,0 +1,95 @@
+/* Profile.css */
+
+.profile-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    font-family: 'Georgia', serif;
+  }
+  
+  /* Left Side */
+  .profile-left {
+    flex: 1;
+    background-color: #0c1733; /* Navy Blue */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+    min-width: 300px;
+    position: relative;
+  }
+  
+  .profile-image-container {
+    text-align: center;
+    background: white;
+    padding: 0px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    max-width: 300px;
+    
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    
+  }
+  
+  .profile-image-container img {
+    width: 100%;
+    height: auto;
+    border: none;
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .profile-name {
+    font-weight: bold;
+    color: white;
+    font-size: 1.1rem;
+    margin-top: 15px;
+    line-height: 1.5;
+  }
+  
+  /* Right Side */
+  .profile-right {
+    flex: 2;
+    background-color: white;
+    padding: 60px 40px;
+    min-width: 300px;
+  }
+  
+  .profile-right h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+  
+  .profile-right p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    color: #222;
+  }
+  
+  /* Responsive Styling */
+  @media (max-width: 768px) {
+    .profile-wrapper {
+      flex-direction: column;
+    }
+  
+    .profile-left, .profile-right {
+      padding: 30px 20px;
+    }
+  
+    .profile-right h1 {
+      font-size: 2rem;
+    }
+  
+    .profile-right p {
+      font-size: 1rem;
+    }
+  }
+  
