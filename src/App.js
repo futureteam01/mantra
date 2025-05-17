@@ -6,7 +6,8 @@ import Contact from "./contact/contact"
 import Profile from "./profile/profile"
 import Signin from "./profile/signin"
 import Partner from "./home/partner"
-// import Admin from "./Admin/admin"
+import Staff from "./profile/staff"
+import Admin from "./Admin/admin"
 import './App.css';
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/profile" element={<Profile/>} />
         <Route path="/signin" element={<Signin/>} />
-        {/* <Route path="/admin" element={<Admin/>} /> */}
+        <Route path="/staff" element={<Staff/>} />
+        <Route path="/admin" element={<Admin/>} />
         <Route path="/partners" element={<Partner/>} />
       </Routes>
     </div>

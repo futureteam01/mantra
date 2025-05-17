@@ -11,7 +11,7 @@ function Signup() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    role: 'staff'
+    
   });
 
   const handleChange = (e) => {
@@ -45,7 +45,11 @@ function Signup() {
 
       <div className="right-section">
         <div className="form-box">
-          <h2>Get Started Now</h2>
+        <div className="top-right-heading">
+        
+        <a href="/staff" className="admin-link-btn">Admin Signin</a>
+        </div>
+        <h2>Staff Loggin</h2>
           <form onSubmit={handleSubmit}>
             <input
               type="email"
@@ -63,11 +67,11 @@ function Signup() {
               onChange={handleChange}
               required
             />
-            <label htmlFor="role">Roles</label>
+            {/* <label htmlFor="role">Roles</label>
             <select name="role" id="role" value={formData.role} onChange={handleChange}>
               <option value="staff">Staff</option>
               <option value="admin">Admin</option>
-            </select>
+            </select> */}
             <button type="submit" className="signup-btn">Sign In</button>
           </form>
         </div>
