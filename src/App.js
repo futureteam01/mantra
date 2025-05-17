@@ -8,6 +8,7 @@ import Signin from "./profile/signin"
 import Partner from "./home/partner"
 import Staff from "./profile/staff"
 import Admin from "./Admin/admin"
+import StaffDashboard from "./Admin/staffland";
 import './App.css';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/signin" element={<Signin/>} />
         <Route path="/staff" element={<Staff/>} />
         <Route path="/admin" element={<Admin/>} />
+        <Route path="/staffing" element={<StaffDashboard/>} />
         <Route path="/partners" element={<Partner/>} />
       </Routes>
     </div>

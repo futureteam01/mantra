@@ -1,6 +1,7 @@
 // Signup.jsx
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../profile/signin.css';
 import logo from '../asset/Mn11.png';
 import balanceImage from '../asset/lagos.jpg';
@@ -13,6 +14,7 @@ function Signup() {
     password: '',
     
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -25,9 +27,10 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('https://your-api-endpoint.com/signup', formData);
+      const response = await axios.post('http://localhost:5000/api/staff/login-staff', formData);
       toast.success('Signup successful!');
       console.log(response.data);
+      navigate('/staffing')
     } catch (err) {
       toast.error(err.response?.data?.message || 'Signup failed. Please try again.');
     }

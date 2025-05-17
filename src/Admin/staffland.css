@@ -1,0 +1,76 @@
+/* StaffProfile.css */
+
+.staff-profile {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+  }
+  
+  .staff-profile h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #333;
+    text-align: center;
+  }
+  
+  .staff-profile p {
+    font-size: 1rem;
+    color: #555;
+    margin: 12px 0;
+    word-wrap: break-word;
+  }
+  
+  .staff-profile p span {
+    font-weight: bold;
+    color: #222;
+  }
+  
+  .staff-profile .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .staff-profile .back-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* ✅ Responsive adjustments */
+  @media (max-width: 768px) {
+    .staff-profile {
+      margin: 20px;
+      padding: 20px;
+    }
+  
+    .staff-profile h2 {
+      font-size: 1.5rem;
+    }
+  
+    .staff-profile p {
+      font-size: 0.95rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .staff-profile {
+      margin: 10px;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  
+    .staff-profile h2 {
+      font-size: 1.3rem;
+    }
+  
+    .staff-profile p {
+      font-size: 0.9rem;
+    }
+  }
+  

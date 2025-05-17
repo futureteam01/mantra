@@ -1,4 +1,4 @@
-// AdminDashboard.jsx
+// StaffDashboard.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../Admin/admin.css';
@@ -10,53 +10,27 @@ const API_BASE_URL = 'http://localhost:5000/api';
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    
+    'Content-Type': 'application/json'
   },
 });
-function AdminDashboard() {
-  const [admin, setAdmin] = useState('');
-  const [activeSection, setActiveSection] = useState('dashboard');
-  const [staffForm, setStaffForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-    
-  });
 
-  
+function StaffDashboard() {
+  const [staff, setStaff] = useState('');
+  const [activeSection, setActiveSection] = useState('dashboard');
   const [fileForm, setFileForm] = useState({
     clientName: '',
     caseDate: '',
     summary: '',
     status: 'pending'
-    
   });
   const [cases, setCases] = useState([]);
   const [editingCaseId, setEditingCaseId] = useState(null);
 
   useEffect(() => {
-    const storedAdmin = JSON.parse(localStorage.getItem('admin')) || { username: 'Admin' };
-    setAdmin(storedAdmin.username);
+    const storedStaff = JSON.parse(localStorage.getItem('staff')) || { username: 'Staff' };
+    setStaff(storedStaff.username);
+    fetchCases();
   }, []);
-
-  const handleStaffChange = (e) => {
-    setStaffForm({
-      ...staffForm,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleStaffSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await api.post('/staff/create-staff', staffForm);
-      toast.success('Staff created successfully!');
-      setStaffForm({ username: '', email: '', password: '' });
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Staff creation failed.');
-    }
-  };
 
   const handleFileChange = (e) => {
     setFileForm({
@@ -68,24 +42,25 @@ function AdminDashboard() {
   const handleFileSubmit = async (e) => {
     e.preventDefault();
     try {
+      const creator = JSON.parse(localStorage.getItem('staff'));
       const formattedData = {
         ...fileForm,
-        caseDate: new Date(fileForm.caseDate).toISOString()
+        caseDate: new Date(fileForm.caseDate).toISOString(),
+        createdBy: creator._id
       };
       await api.post('/cases/create-new', formattedData);
       toast.success('Case created!');
       setFileForm({ clientName: '', caseDate: '', summary: '', status: 'pending' });
-      
+      fetchCases();
     } catch (err) {
-      console.error('Case creation error:', err.response?.data);
+      console.error('Case creation error:', err);
       toast.error(err.response?.data?.message || 'Case creation failed.');
     }
   };
 
-  
   const handleDeleteCase = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cases/${id}`);
+      await api.delete(`/cases/${id}`);
       toast.success('Case deleted.');
       fetchCases();
     } catch (err) {
@@ -94,22 +69,14 @@ function AdminDashboard() {
   };
 
   const handleEditChange = (id, field, value) => {
-    if (field === 'caseDate') {
-      const isoDate = new Date(value).toISOString();
-      return setCases(prev =>
-        prev.map(c => (c._id === id ? { ...c, [field]: isoDate } : c))
-      );
-    }
-    
-    setCases(prev =>
-      prev.map(c => (c._id === id ? { ...c, [field]: value } : c))
-    );
+    const updatedValue = field === 'caseDate' ? new Date(value).toISOString() : value;
+    setCases(prev => prev.map(c => (c._id === id ? { ...c, [field]: updatedValue } : c)));
   };
 
   const handleUpdateCase = async (id) => {
     const caseToUpdate = cases.find((c) => c._id === id);
     try {
-      await axios.put(`http://localhost:5000/api/cases/${id}`, caseToUpdate);
+      await api.put(`/cases/${id}`, caseToUpdate);
       toast.success('Case updated.');
       setEditingCaseId(null);
       fetchCases();
@@ -120,43 +87,26 @@ function AdminDashboard() {
 
   const fetchCases = async () => {
     try {
-      // Get staff ID from wherever you store user data (localStorage, context, etc.)
-      const staffId = JSON.parse(localStorage.getItem('staff'))._id; // Adjust based on your auth storage
-      
+      const staffId = JSON.parse(localStorage.getItem('staff'))._id;
       const response = await api.get(`/my-cases?staffId=${staffId}`);
       setCases(response.data);
-      setActiveSection('dashboard');
     } catch (err) {
-      toast.error(err.response?.data?.msg || 'Failed to fetch cases'); // Match backend's 'msg' key
+      toast.error(err.response?.data?.msg || 'Failed to fetch cases');
     }
   };
 
   return (
     <div className="admin-dashboard">
       <aside className="sidebar">
-        <h3>Admin Panel</h3>
+        <h3>Staff Panel</h3>
         <ul>
-          <li onClick={fetchCases} className={activeSection === 'dashboard' ? 'active' : ''}>View All Cases</li>
-          <li onClick={() => setActiveSection('createStaff')} className={activeSection === 'createStaff' ? 'active' : ''}>Create Staff</li>
           <li onClick={() => setActiveSection('createFile')} className={activeSection === 'createFile' ? 'active' : ''}>Create File</li>
           <li onClick={() => setActiveSection('editDeleteFiles')} className={activeSection === 'editDeleteFiles' ? 'active' : ''}>Edit/Delete Files</li>
         </ul>
       </aside>
 
       <main className="main-content">
-        <h2>Welcome, {admin}</h2>
-
-        {activeSection === 'createStaff' && (
-          <section className="form-section">
-            <h3>Create New Staff</h3>
-            <form onSubmit={handleStaffSubmit}>
-              <input type="text" name="username" placeholder="Username" value={staffForm.username} onChange={handleStaffChange} required />
-              <input type="email" name="email" placeholder="Email" value={staffForm.email} onChange={handleStaffChange} required />
-              <input type="password" name="password" placeholder="Password" value={staffForm.password} onChange={handleStaffChange} required />
-              <button type="submit">Create Staff</button>
-            </form>
-          </section>
-        )}
+        <h2>Welcome, {staff}</h2>
 
         {activeSection === 'createFile' && (
           <section className="form-section">
@@ -166,9 +116,9 @@ function AdminDashboard() {
               <input type="date" name="caseDate" value={fileForm.caseDate} onChange={handleFileChange} required />
               <textarea name="summary" placeholder="Summary" value={fileForm.summary} onChange={handleFileChange} required />
               <select name="status" value={fileForm.status} onChange={handleFileChange} required>
-                <option value="pending">pending</option>
-                <option value="completed">completed</option>
-                <option value="furtheraction">further action</option>
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="furtheraction">Further Action</option>
               </select>
               <button type="submit">Create Case</button>
             </form>
@@ -211,23 +161,6 @@ function AdminDashboard() {
             )}
           </section>
         )}
-
-        {activeSection === 'dashboard' && (
-          <section className="cases-section">
-            <h3>Cases</h3>
-            {cases.length === 0 ? (
-              <p>No cases available.</p>
-            ) : (
-              <ul>
-                {cases.map((c) => (
-                  <li key={c._id}>
-                    <strong>{c.title}</strong> - {c.status} by {c.handledBy}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
       </main>
 
       <ToastContainer />
@@ -235,4 +168,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default StaffDashboard;
