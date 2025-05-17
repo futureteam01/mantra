@@ -19,7 +19,7 @@ export default function ContactPage() {
             Lagos.
           </p>
           <p><strong>TELL</strong></p>
-          <p>+2348137997815, +2348154517333</p>
+          <p>2348137997815, 2348154517333</p>
           <p><strong>EMAIL</strong></p>
           <p>
             ogundelea076@gmail.com<br />
