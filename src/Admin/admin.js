@@ -1,238 +1,337 @@
-// AdminDashboard.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import '../Admin/admin.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import '../Admin/admin.css';
 
-const API_BASE_URL = 'http://localhost:5000/api';
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    
-  },
-});
-function AdminDashboard() {
-  const [admin, setAdmin] = useState('');
+const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCase, setSelectedCase] = useState(null);
   const [activeSection, setActiveSection] = useState('dashboard');
-  const [staffForm, setStaffForm] = useState({
-    username: '',
-    email: '',
-    password: '',
-    
+  const [formData, setFormData] = useState({
+    staff: { email: '', password: '', role: 'staff' },
+    case: { title: '', summary: '', status: 'open' }
+  });
+  const [data, setData] = useState({
+    staff: [],
+    cases: [],
+    stats: { totalCases: 0, activeStaff: 0, open: 0, closed: 0, furtherAction: 0 }
   });
 
-  
-  const [fileForm, setFileForm] = useState({
-    clientName: '',
-    caseDate: '',
-    summary: '',
-    status: 'pending'
-    
-  });
-  const [cases, setCases] = useState([]);
-  const [editingCaseId, setEditingCaseId] = useState(null);
+  const handleView = (caseData) => {
+    setSelectedCase(caseData);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
-    const storedAdmin = JSON.parse(localStorage.getItem('admin')) || { username: 'Admin' };
-    setAdmin(storedAdmin.username);
+    const fetchCases = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/cases/all-cases', {
+          withCredentials: true
+        });
+
+        const cases = res.data;
+
+        setData({
+          staff: [],
+          cases,
+          stats: {
+            totalCases: cases.length,
+            activeStaff: 0,
+            open: cases.filter(c => c.status === 'open').length,
+            closed: cases.filter(c => c.status === 'closed').length,
+            furtherAction: cases.filter(c => c.status === 'further action').length
+          }
+        });
+
+      } catch (error) {
+        toast.error('Error fetching cases');
+        console.error(error);
+      }
+    };
+
+    fetchCases();
   }, []);
 
-  const handleStaffChange = (e) => {
-    setStaffForm({
-      ...staffForm,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleStaffSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (type) => {
     try {
-      await api.post('/staff/create-staff', staffForm);
-      toast.success('Staff created successfully!');
-      setStaffForm({ username: '', email: '', password: '' });
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Staff creation failed.');
-    }
-  };
-
-  const handleFileChange = (e) => {
-    setFileForm({
-      ...fileForm,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleFileSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formattedData = {
-        ...fileForm,
-        caseDate: new Date(fileForm.caseDate).toISOString()
+      const endpoints = {
+        staff: 'http://localhost:5000/api/auth/register',
+        case: 'http://localhost:5000/api/cases/create-new'
       };
-      await api.post('/cases/create-new', formattedData);
-      toast.success('Case created!');
-      setFileForm({ clientName: '', caseDate: '', summary: '', status: 'pending' });
-      
-    } catch (err) {
-      console.error('Case creation error:', err.response?.data);
-      toast.error(err.response?.data?.message || 'Case creation failed.');
+
+      const requestData = type === 'staff'
+        ? { ...formData.staff }
+        : {
+            title: formData.case.title,
+            summary: formData.case.summary,
+            status: formData.case.status
+          };
+
+      const res = await axios.post(endpoints[type], requestData, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true
+      });
+
+      setData(prev => {
+        if (type === 'staff') {
+          return {
+            ...prev,
+            staff: [...prev.staff, res.data],
+            stats: { ...prev.stats, activeStaff: prev.stats.activeStaff + 1 }
+          };
+        } else {
+          const updatedStats = { ...prev.stats, totalCases: prev.stats.totalCases + 1 };
+          if (res.data.status === 'open') updatedStats.open += 1;
+          else if (res.data.status === 'closed') updatedStats.closed += 1;
+          else if (res.data.status === 'further action') updatedStats.furtherAction += 1;
+
+          return {
+            ...prev,
+            cases: [...prev.cases, res.data],
+            stats: updatedStats
+          };
+        }
+      });
+
+      setFormData(prev => ({
+        ...prev,
+        [type]: type === 'staff'
+          ? { email: '', password: '', role: 'staff' }
+          : { title: '', summary: '', status: 'open' }
+      }));
+
+      toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} created successfully!`);
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || 
+                           error.response?.data?.error ||
+                           'Error creating record';
+      toast.error(errorMessage);
     }
   };
 
-  
-  const handleDeleteCase = async (id) => {
+  const deleteStaff = async (email) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cases/${id}`);
-      toast.success('Case deleted.');
-      fetchCases();
-    } catch (err) {
-      toast.error('Failed to delete case.');
+      await axios.delete(`http://localhost:5000/api/auth/staff/${email}`, {
+        withCredentials: true
+      });
+      setData(prev => ({
+        ...prev,
+        staff: prev.staff.filter(s => s.email !== email),
+        stats: { ...prev.stats, activeStaff: prev.stats.activeStaff - 1 }
+      }));
+      toast.success('Staff member deleted');
+    } catch (error) {
+      toast.error('Error deleting staff');
     }
   };
 
-  const handleEditChange = (id, field, value) => {
-    if (field === 'caseDate') {
-      const isoDate = new Date(value).toISOString();
-      return setCases(prev =>
-        prev.map(c => (c._id === id ? { ...c, [field]: isoDate } : c))
-      );
-    }
-    
-    setCases(prev =>
-      prev.map(c => (c._id === id ? { ...c, [field]: value } : c))
-    );
-  };
-
-  const handleUpdateCase = async (id) => {
-    const caseToUpdate = cases.find((c) => c._id === id);
+  const deleteCase = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/cases/${id}`, caseToUpdate);
-      toast.success('Case updated.');
-      setEditingCaseId(null);
-      fetchCases();
-    } catch (err) {
-      toast.error('Failed to update case.');
+      await axios.delete(`http://localhost:5000/api/cases/${id}`, { withCredentials: true });
+
+      setData(prev => {
+        const removedCase = prev.cases.find(c => c._id === id);
+        const updatedCases = prev.cases.filter(c => c._id !== id);
+
+        const stats = {
+          ...prev.stats,
+          totalCases: prev.stats.totalCases - 1
+        };
+        if (removedCase.status === 'open') stats.open -= 1;
+        else if (removedCase.status === 'closed') stats.closed -= 1;
+        else if (removedCase.status === 'further action') stats.furtherAction -= 1;
+
+        return { ...prev, cases: updatedCases, stats };
+      });
+
+      toast.success('Case deleted successfully');
+    } catch (error) {
+      toast.error('Error deleting case');
     }
   };
 
-  const fetchCases = async () => {
-    try {
-      // Get staff ID from wherever you store user data (localStorage, context, etc.)
-      const staffId = JSON.parse(localStorage.getItem('staff'))._id; // Adjust based on your auth storage
-      
-      const response = await api.get(`/my-cases?staffId=${staffId}`);
-      setCases(response.data);
-      setActiveSection('dashboard');
-    } catch (err) {
-      toast.error(err.response?.data?.msg || 'Failed to fetch cases'); // Match backend's 'msg' key
-    }
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    navigate('/admin/signin');
   };
 
   return (
-    <div className="admin-dashboard">
-      <aside className="sidebar">
-        <h3>Admin Panel</h3>
-        <ul>
-          <li onClick={fetchCases} className={activeSection === 'dashboard' ? 'active' : ''}>View All Cases</li>
-          <li onClick={() => setActiveSection('createStaff')} className={activeSection === 'createStaff' ? 'active' : ''}>Create Staff</li>
-          <li onClick={() => setActiveSection('createFile')} className={activeSection === 'createFile' ? 'active' : ''}>Create File</li>
-          <li onClick={() => setActiveSection('editDeleteFiles')} className={activeSection === 'editDeleteFiles' ? 'active' : ''}>Edit/Delete Files</li>
-        </ul>
-      </aside>
+    <div className="admin-container">
+      <nav className="sidebar">
+        <div className="branding">
+          <h2>Case Manager Pro</h2>
+          <p>Admin Dashboard</p>
+        </div>
+
+        <div className="nav-menu">
+          <button className={activeSection === 'dashboard' ? 'active' : ''} onClick={() => setActiveSection('dashboard')}>📊 Dashboard</button>
+          <button className={activeSection === 'staff' ? 'active' : ''} onClick={() => setActiveSection('staff')}>👥 Manage Staff</button>
+          <button className={activeSection === 'createStaff' ? 'active' : ''} onClick={() => setActiveSection('createStaff')}>➕ Create Staff</button>
+          <button className={activeSection === 'createCase' ? 'active' : ''} onClick={() => setActiveSection('createCase')}>📁 Create Case</button>
+        </div>
+
+        <button className="logout-btn" onClick={handleLogout}>🔒 Logout</button>
+      </nav>
 
       <main className="main-content">
-        <h2>Welcome, {admin}</h2>
-
-        {activeSection === 'createStaff' && (
-          <section className="form-section">
-            <h3>Create New Staff</h3>
-            <form onSubmit={handleStaffSubmit}>
-              <input type="text" name="username" placeholder="Username" value={staffForm.username} onChange={handleStaffChange} required />
-              <input type="email" name="email" placeholder="Email" value={staffForm.email} onChange={handleStaffChange} required />
-              <input type="password" name="password" placeholder="Password" value={staffForm.password} onChange={handleStaffChange} required />
-              <button type="submit">Create Staff</button>
-            </form>
-          </section>
-        )}
-
-        {activeSection === 'createFile' && (
-          <section className="form-section">
-            <h3>Create New Case</h3>
-            <form onSubmit={handleFileSubmit}>
-              <input type="text" name="clientName" placeholder="Client Name" value={fileForm.clientName} onChange={handleFileChange} required />
-              <input type="date" name="caseDate" value={fileForm.caseDate} onChange={handleFileChange} required />
-              <textarea name="summary" placeholder="Summary" value={fileForm.summary} onChange={handleFileChange} required />
-              <select name="status" value={fileForm.status} onChange={handleFileChange} required>
-                <option value="pending">pending</option>
-                <option value="completed">completed</option>
-                <option value="furtheraction">further action</option>
-              </select>
-              <button type="submit">Create Case</button>
-            </form>
-          </section>
-        )}
-
-        {activeSection === 'editDeleteFiles' && (
-          <section>
-            <h3>Edit/Delete Cases</h3>
-            {cases.length === 0 ? (
-              <p>No cases to display.</p>
-            ) : (
-              <ul>
-                {cases.map((c) => (
-                  <li key={c._id} className="editable-case">
-                    {editingCaseId === c._id ? (
-                      <>
-                        <input type="text" value={c.clientName} onChange={(e) => handleEditChange(c._id, 'clientName', e.target.value)} />
-                        <input type="date" value={c.caseDate?.substring(0, 10)} onChange={(e) => handleEditChange(c._id, 'caseDate', e.target.value)} />
-                        <textarea value={c.summary} onChange={(e) => handleEditChange(c._id, 'summary', e.target.value)} />
-                        <select value={c.status} onChange={(e) => handleEditChange(c._id, 'status', e.target.value)}>
-                          <option value="pending">Pending</option>
-                          <option value="completed">Completed</option>
-                          <option value="furtheraction">Further Action</option>
-                        </select>
-                        <button onClick={() => handleUpdateCase(c._id)}>Save</button>
-                        <button onClick={() => setEditingCaseId(null)}>Cancel</button>
-                      </>
-                    ) : (
-                      <>
-                        <p><strong>{c.clientName}</strong> | {c.caseDate?.substring(0, 10)} | {c.status}</p>
-                        <p>{c.summary}</p>
-                        <button onClick={() => setEditingCaseId(c._id)}>Edit</button>
-                        <button onClick={() => handleDeleteCase(c._id)}>Delete</button>
-                      </>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
+        <header className="content-header">
+          <h1>{{
+            dashboard: 'Case Overview',
+            staff: 'Staff Management',
+            createStaff: 'Create New Staff',
+            createCase: 'Create New Case'
+          }[activeSection]}</h1>
+        </header>
 
         {activeSection === 'dashboard' && (
-          <section className="cases-section">
-            <h3>Cases</h3>
-            {cases.length === 0 ? (
-              <p>No cases available.</p>
-            ) : (
-              <ul>
-                {cases.map((c) => (
-                  <li key={c._id}>
-                    <strong>{c.title}</strong> - {c.status} by {c.handledBy}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
-        )}
-      </main>
+          <div className="dashboard-grid">
+            <div className="stats-card">
+              <h3>📈 Statistics</h3>
+              <div className="stats-grid">
+                <StatBox icon="📂" label="Total Cases" value={data.stats.totalCases} />
+                <StatBox icon="🟢" label="Open" value={data.stats.open} />
+                <StatBox icon="🔴" label="Closed" value={data.stats.closed} />
+                <StatBox icon="⚠️" label="Further Action" value={data.stats.furtherAction} />
+              </div>
+            </div>
 
-      <ToastContainer />
+            <div className="cases-card">
+              <h3>Recent Cases</h3>
+              <div className="cases-list">
+                {data.cases.map(caseItem => (
+                  <CaseCard key={caseItem._id} data={caseItem} onDelete={deleteCase} onView={handleView} />
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeSection === 'staff' && (
+          <div className="staff-grid">
+            {data.staff.map(staff => (
+              <StaffCard key={staff.email} data={staff} onDelete={deleteStaff} />
+            ))}
+          </div>
+        )}
+
+        {(activeSection === 'createStaff' || activeSection === 'createCase') && (
+          <div className="form-container">
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit(activeSection.replace('create', '').toLowerCase());
+            }}>
+              {activeSection === 'createStaff' ? (
+                <>
+                  <InputField label="Email Address" type="email" value={formData.staff.email} onChange={e => setFormData(prev => ({ ...prev, staff: { ...prev.staff, email: e.target.value } }))} />
+                  <InputField label="Password" type="password" value={formData.staff.password} onChange={e => setFormData(prev => ({ ...prev, staff: { ...prev.staff, password: e.target.value } }))} />
+                  <div className="form-group">
+                    <label>Role</label>
+                    <select value={formData.staff.role} onChange={e => setFormData(prev => ({ ...prev, staff: { ...prev.staff, role: e.target.value } }))}>
+                      <option value="staff">Staff</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <InputField label="Case Title" value={formData.case.title} onChange={e => setFormData(prev => ({ ...prev, case: { ...prev.case, title: e.target.value } }))} />
+                  <div className="form-group">
+                    <label>Status</label>
+                    <select value={formData.case.status} onChange={e => setFormData(prev => ({ ...prev, case: { ...prev.case, status: e.target.value } }))}>
+                      <option value="open">Open</option>
+                      <option value="closed">Closed</option>
+                      <option value="further action">Further Action</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label>Case Summary</label>
+                    <textarea value={formData.case.summary} onChange={e => setFormData(prev => ({ ...prev, case: { ...prev.case, summary: e.target.value } }))} />
+                  </div>
+                </>
+              )}
+              <button type="submit" className="submit-btn">{activeSection === 'createStaff' ? 'Create Staff' : 'Create Case'}</button>
+            </form>
+          </div>
+        )}
+
+        {isModalOpen && selectedCase && (
+          <div className="modal">
+            <div className="form-container">
+              <h3>Edit Case</h3>
+              <InputField label="Title" value={selectedCase.title} onChange={e => setSelectedCase(prev => ({ ...prev, title: e.target.value }))} />
+              <div className="form-group">
+                <label>Status</label>
+                <select value={selectedCase.status} onChange={e => setSelectedCase(prev => ({ ...prev, status: e.target.value }))}>
+                  <option value="open">Open</option>
+                  <option value="closed">Closed</option>
+                  <option value="further action">Further Action</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Summary</label>
+                <textarea value={selectedCase.summary} onChange={e => setSelectedCase(prev => ({ ...prev, summary: e.target.value }))} />
+              </div>
+              <button className="submit-btn" onClick={() => setIsModalOpen(false)}>Save</button>
+              <button className="delete-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
+
+        <ToastContainer position="bottom-right" />
+      </main>
     </div>
   );
-}
+};
+
+const StatBox = ({ icon, label, value }) => (
+  <div className="stat-box">
+    <span className="stat-icon">{icon}</span>
+    <div>
+      <h4>{label}</h4>
+      <p>{value}</p>
+    </div>
+  </div>
+);
+
+const CaseCard = ({ data, onDelete, onView }) => (
+  <div className="case-card">
+    <div className="case-header">
+      <h4>{data.title || 'Untitled Case'}</h4>
+      <span className={`status ${(data.status || '').replace(' ', '-')}`}>{data.status || 'Unknown'}</span>
+    </div>
+    <p className="description">{data.summary || 'No summary provided.'}</p>
+    <div className="case-footer">
+      <span>📅 {data.createdAt ? new Date(data.createdAt).toLocaleDateString() : 'N/A'}</span>
+      <span>👤 {data.createdBy?.email || 'Unknown'}</span>
+    </div>
+    <div className="case-actions">
+      <button onClick={() => onView(data)}>✏️ View / Edit</button>
+      <button onClick={() => onDelete(data._id)}>🗑️ Delete</button>
+    </div>
+  </div>
+);
+
+const StaffCard = ({ data, onDelete }) => (
+  <div className="staff-card">
+    <div className="staff-info">
+      <div className="avatar">{data.email[0].toUpperCase()}</div>
+      <div>
+        <h4>{data.email}</h4>
+        <p>Role: {data.role}</p>
+      </div>
+    </div>
+    <button className="delete-btn" onClick={() => onDelete(data.email)}>🗑️ Delete</button>
+  </div>
+);
+
+const InputField = ({ label, ...props }) => (
+  <div className="form-group">
+    <label>{label}</label>
+    <input {...props} />
+  </div>
+);
 
 export default AdminDashboard;

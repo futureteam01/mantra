@@ -15,7 +15,7 @@ export default function Partners() {
         <div className="partner-card">
           <img src={prof} alt="Gideon" className="partner-image" />
           <h3 className="partner-name">GIDEON O. BALOGUN, LLB. (Hons) LLM</h3>
-          <Link to="/partners/gideon" className="view-profile-button">View Profile</Link>
+          <Link to="/profile1" className="view-profile-button">View Profile</Link>
         </div>
 
         <div className="partner-card">
@@ -27,7 +27,7 @@ export default function Partners() {
         <div className="partner-card">
           <img src={girl} alt="Temilola" className="partner-image" />
           <h3 className="partner-name">TEMILOLA B. OLAEGBE. LLB. (Hons), LLM (in view)</h3>
-          <Link to="/partners/temilola" className="view-profile-button">View Profile</Link>
+          <Link to="/profile2" className="view-profile-button">View Profile</Link>
         </div>
       </div>
     </section>

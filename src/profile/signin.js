@@ -27,7 +27,8 @@ function Signup() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/staff/login-staff', formData);
+      const response = await axios.post('http://localhost:5000/api/auth/login-staff', formData);
+      localStorage.setItem('staffEmail', response.data.email);
       toast.success('Signup successful!');
       console.log(response.data);
       navigate('/staffing')

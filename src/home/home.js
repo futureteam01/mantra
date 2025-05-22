@@ -23,9 +23,9 @@ function Home() {
 
           <nav className="nav">
             <a href="/about">About</a>
-            <a href="#practice">Practice Areas</a>
+            <a href="/practice">Practice Areas</a>
             <a href="/partners">Partners</a>
-            <a href="#csr">Corporate Social Responsibility</a>
+            <a href="/csr">Corporate Social Responsibility</a>
             <button className="signin-btn" onClick={() => navigate('/signin')}>
               Sign In
             </button>
@@ -51,33 +51,7 @@ function Home() {
         </section>
       </div>
 
-     
-      <footer className="footer">
-        <div className="footer-columns">
-          <div className="footer-col">
-            <h3>Call Us</h3>
-            <p>+2348137997815</p>
-          </div>
-
-          <div className="footer-col">
-            <h3>Email</h3>
-            <p>mantraattorneys@gmail.com</p>
-          </div>
-
-          <div className="footer-col">
-            <h3>Visit</h3>
-            <p>
-              1st Chancery House, No&nbsp;5,<br />C &amp; I Leasing Drive, Lekki&nbsp;Phase&nbsp;1
-            </p>
-          </div>
-        </div>
-
-        <div className="footer-bottom">
-          <span>© 2025 Mantra Attorneys LP</span>
-          <a href="#policy">Privacy Policy &amp; Terms of Use</a>
-        </div>
-      </footer>
-    </>
+     </>
   );
 }
 

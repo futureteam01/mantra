@@ -1,7 +1,13 @@
 import React from "react";
 import '../contact/contact.css';
+import { useForm, ValidationError } from '@formspree/react';
 
 export default function ContactPage() {
+
+  const [state, handleSubmit] = useForm("xanozpoo");
+  if (state.succeeded) {
+      return <p>Thanks for joining!</p>;
+  }
   return (
     <div className="contact-wrapper">
       <div className="contact-header">
@@ -29,13 +35,46 @@ export default function ContactPage() {
 
         <div className="contact-form">
           <h2>Message Us</h2>
-          <form>
-            <input type="text" placeholder="Enter your name" name="name" required />
-            <input type="email" placeholder="Enter your email" name="email" required />
-            <input type="tel" placeholder="Enter your number" name="phone" required />
-            <textarea placeholder="Leave your message here" name="message" rows="5" required></textarea>
-            <button type="submit">Submit</button>
-          </form>
+          <form onSubmit={handleSubmit} className="contact-form">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            required
+          />
+
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+              />
+              <ValidationError prefix="Email" field="email" errors={state.errors} />
+
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                placeholder="Enter your number"
+                required
+              />
+
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Leave your message here"
+                rows="5"
+                required
+              ></textarea>
+              <ValidationError prefix="Message" field="message" errors={state.errors} />
+
+              <button type="submit" disabled={state.submitting}>
+                Submit
+              </button>
+            </form>
+
         </div>
       </div>
     </div>

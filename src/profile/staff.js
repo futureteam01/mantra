@@ -52,7 +52,7 @@ function Signup() {
         <div className="form-box">
         <div className="top-right-heading">
         
-        <a href="/staff" className="admin-link-btn">Staff Portal</a>
+        <a href="/signin" className="admin-link-btn">Staff Portal</a>
         </div>
         <h2>Admin Login</h2>
           <form onSubmit={handleSubmit}>

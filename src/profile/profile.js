@@ -1,7 +1,7 @@
 // Profile.js
 import React from 'react';
 import '../profile/profile.css';
-import profileImage from '../asset/pro.jpg'; // Replace with your actual image path
+import profileImage from '../asset/pro.jpg'; 
 
 const Profile = () => {
   return (

@@ -1,0 +1,70 @@
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .practice-areas-container {
+    font-family: 'Georgia', serif;
+    color: #222;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .head{
+    background-color: #0a1b3f;
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+  
+  .head h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+  }
+  
+  .areas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    padding: 4rem 5%;
+  }
+  
+  .area-box {
+    background: white;
+    padding: 1.8rem;
+    border-radius: 0.75rem;
+    border-left: 5px solid goldenrod;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .area-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .area-number {
+    font-size: 2rem;
+    color: goldenrod;
+    font-weight: 700;
+  }
+  
+  .area-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-top: 0.4rem;
+    color: #0a1b3f;
+  }
+  
+  .area-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-top: 0.6rem;
+    color: #333;
+  }
+  
+  
+  
