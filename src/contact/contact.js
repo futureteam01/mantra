@@ -3,16 +3,28 @@ import '../contact/contact.css';
 import { useForm, ValidationError } from '@formspree/react';
 
 export default function ContactPage() {
-
   const [state, handleSubmit] = useForm("xanozpoo");
   if (state.succeeded) {
-      return <p>Thanks for joining!</p>;
+    return <p>Thanks for joining!</p>;
   }
+
   return (
     <div className="contact-wrapper">
       <div className="contact-header">
         <h1>Contact</h1>
+        <div className="social-icons">
+          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png" alt="Instagram" />
+          </a>
+          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png" alt="Facebook" />
+          </a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.icons8.com/ios-glyphs/30/ffffff/linkedin.png" alt="LinkedIn" />
+          </a>
+        </div>
       </div>
+
       <div className="contact-container">
         <div className="contact-info">
           <h2>Get In Touch</h2>
@@ -36,45 +48,44 @@ export default function ContactPage() {
         <div className="contact-form">
           <h2>Message Us</h2>
           <form onSubmit={handleSubmit} className="contact-form">
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Enter your name"
-            required
-          />
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              required
+            />
 
-              <input
-                type="email"
-                id="email"
-                name="email"
-                placeholder="Enter your email"
-                required
-              />
-              <ValidationError prefix="Email" field="email" errors={state.errors} />
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email"
+              required
+            />
+            <ValidationError prefix="Email" field="email" errors={state.errors} />
 
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                placeholder="Enter your number"
-                required
-              />
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="Enter your number"
+              required
+            />
 
-              <textarea
-                id="message"
-                name="message"
-                placeholder="Leave your message here"
-                rows="5"
-                required
-              ></textarea>
-              <ValidationError prefix="Message" field="message" errors={state.errors} />
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Leave your message here"
+              rows="5"
+              required
+            ></textarea>
+            <ValidationError prefix="Message" field="message" errors={state.errors} />
 
-              <button type="submit" disabled={state.submitting}>
-                Submit
-              </button>
-            </form>
-
+            <button type="submit" disabled={state.submitting}>
+              Submit
+            </button>
+          </form>
         </div>
       </div>
     </div>

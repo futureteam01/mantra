@@ -15,11 +15,32 @@ body, html {
   text-align: left;
   color: white;
   padding-left: 5%;
+  position: relative;
 }
 
 .contact-header h1 {
   font-size: 2.5rem;
   margin: 0;
+}
+
+.social-icons {
+  position: absolute;
+  top: 2rem;
+  right: 5%;
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icons img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.3s ease;
+}
+
+.social-icons img:hover {
+  transform: scale(1.2);
+  cursor: pointer;
 }
 
 .contact-container {
@@ -61,16 +82,16 @@ body, html {
   background-repeat: no-repeat;
 }
 
-/* Correct icon placement */
-.contact-info p:nth-of-type(3)::before { /* Address */
+/* Icon placements */
+.contact-info p:nth-of-type(3)::before {
   background-image: url('https://img.icons8.com/ios-filled/50/000000/marker.png');
 }
 
-.contact-info p:nth-of-type(5)::before { /* Telephone */
+.contact-info p:nth-of-type(5)::before {
   background-image: url('https://img.icons8.com/ios-filled/50/000000/phone.png');
 }
 
-.contact-info p:nth-of-type(7)::before { /* Email */
+.contact-info p:nth-of-type(7)::before {
   background-image: url('https://img.icons8.com/ios-filled/50/000000/email.png');
 }
 
@@ -107,6 +128,7 @@ button {
   font-size: 1rem;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .contact-container {
     flex-direction: column;
@@ -118,5 +140,16 @@ button {
 
   .contact-info, .contact-form {
     width: 100%;
+  }
+
+  .social-icons {
+    top: 1rem;
+    right: 1rem;
+    gap: 0.8rem;
+  }
+
+  .social-icons img {
+    width: 20px;
+    height: 20px;
   }
 }

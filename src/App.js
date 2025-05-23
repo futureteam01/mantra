@@ -13,6 +13,7 @@ import Practice from "./home/practise"
 import Profile1 from "./mantra/profile1"
 import Csr from "./contact/csr"
 import Profile2 from "./mantra/profile2"
+import Insight from "./contact/insight"
 import './App.css';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path="/practice" element={<Practice/>} />
         <Route path="/profile1" element={<Profile1/>} />
         <Route path="/profile2" element={<Profile2/>} />
+        <Route path="/insight" element={<Insight/>} />
         
       </Routes>
     </div>
