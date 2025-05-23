@@ -13,10 +13,10 @@ export default function ContactPage() {
       <div className="contact-header">
         <h1>Contact</h1>
         <div className="social-icons">
-          <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.instagram.com/mantraattorneys?igsh=MWc1enc2bXJ6MXhrcA==" target="_blank" rel="noopener noreferrer">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png" alt="Instagram" />
           </a>
-          <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/profile.php?id=61576712904817&mibextid=ZbWKwL" target="_blank" rel="noopener noreferrer">
             <img src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png" alt="Facebook" />
           </a>
           <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">

@@ -29,7 +29,7 @@ function Home() {
           <a href="/partners">Partners</a>
           <a href="/insight">Insight</a>
           <a href="/csr">Corporate Social Responsibility</a>
-          <button className="signin-btn" onClick={() => navigate('/signin')}>
+          <button className="signin-btn" onClick={() => navigate('/staff')}>
             Sign In
           </button>
         </nav>

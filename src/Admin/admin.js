@@ -24,12 +24,34 @@ const AdminDashboard = () => {
     setSelectedCase(caseData);
     setIsModalOpen(true);
   };
+  useEffect(() => {
+  const fetchStaff = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/auth/admins', {
+        withCredentials: true
+      });
+      setData(prev => ({
+        
+        
+        ...prev,
+        staff: res.data,
+        stats: { ...prev.stats, activeStaff: res.data.length }
+      }));
+    } catch (error) {
+      toast.error('Error fetching staff');
+    }
+    
+  }; fetchStaff();
+}, 
+  );
+  
 
   useEffect(() => {
     const fetchCases = async () => {
       try {
         const res = await axios.get('http://localhost:5000/api/cases/all-cases', {
           withCredentials: true
+          
         });
 
         const cases = res.data;
@@ -53,6 +75,7 @@ const AdminDashboard = () => {
     };
 
     fetchCases();
+    
   }, []);
 
   const handleSubmit = async (type) => {
@@ -130,7 +153,7 @@ const AdminDashboard = () => {
 
   const deleteCase = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cases/${id}`, { withCredentials: true });
+      await axios.delete(`http://localhost:5000/api/cases/delete${id}`, { withCredentials: true });
 
       setData(prev => {
         const removedCase = prev.cases.find(c => c._id === id);
@@ -154,9 +177,9 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    navigate('/admin/signin');
+    navigate('/staff');
   };
+  
 
   return (
     <div className="admin-container">
@@ -318,7 +341,7 @@ const StaffCard = ({ data, onDelete }) => (
   <div className="staff-card">
     <div className="staff-info">
       <div className="avatar">{data.email[0].toUpperCase()}</div>
-      <div>
+      <div className="details">
         <h4>{data.email}</h4>
         <p>Role: {data.role}</p>
       </div>
@@ -326,6 +349,7 @@ const StaffCard = ({ data, onDelete }) => (
     <button className="delete-btn" onClick={() => onDelete(data.email)}>🗑️ Delete</button>
   </div>
 );
+
 
 const InputField = ({ label, ...props }) => (
   <div className="form-group">
