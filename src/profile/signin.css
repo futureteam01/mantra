@@ -7,14 +7,14 @@ body, html {
   width: 100%;
 }
 
-/* Main Container */
+
 .signup-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
 }
 
-/* Left Section (Image and Branding) */
+
 .left-section {
   position: relative;
   flex: 0.4;

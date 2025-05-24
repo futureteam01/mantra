@@ -1,4 +1,4 @@
-/* CorporateSocialResponsibility.css */
+
 
 .csr-wrapper {
   font-family: 'Georgia', serif;
@@ -50,12 +50,7 @@
   object-fit: contain;
 }
 
-/* Banner image section */
-/* .csr-banner {
-  background-color: #0a1b3f;
-  width: 50%;
-  overflow: hidden;
-}  */
+
 
 .csr-banner img {
   width: 50%;
@@ -67,7 +62,7 @@
   margin-top: -25%;
 }
 
-/* Responsive layout */
+
 @media screen and (max-width: 768px) {
   .csr-top-section {
     flex-direction: column;

@@ -1,17 +1,6 @@
-/* Full JavaScript + CSS code provided by user updated */
 
-// The JavaScript React code is already complete and does not need changes beyond fixing minor issues.
-// Since you already shared both JS and CSS, they are bundled into this document for convenience.
 
-// However, to keep code clean and modular, here’s a breakdown:
 
-// 1. Save the updated JavaScript code (above) as:
-//    src/Admin/AdminDashboard.js
-
-// 2. Save the following CSS as:
-//    src/Admin/admin.css
-
-/* ---- src/Admin/admin.css ---- */
 :root {
   --primary: #2c3e50;
   --secondary: #3498db;
@@ -238,17 +227,7 @@ body {
   border: 1px solid #ccc;
 }
 
-/* .staff-card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
-.staff-info {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-} */
 
 .staff-card {
   display: flex;

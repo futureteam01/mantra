@@ -1,4 +1,4 @@
-/* Profile.css */
+
 
 .profile-wrapper {
     display: flex;
@@ -7,10 +7,10 @@
     font-family: 'Georgia', serif;
   }
   
-  /* Left Side */
+ 
   .profile-left {
     flex: 1;
-    background-color: #0c1733; /* Navy Blue */
+    background-color: #0c1733; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,7 +74,6 @@
     color: #222;
   }
   
-  /* Responsive Styling */
   @media (max-width: 768px) {
     .profile-wrapper {
       flex-direction: column;

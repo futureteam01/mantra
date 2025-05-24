@@ -7,10 +7,10 @@
     font-family: 'Georgia', serif;
   }
   
-  /* Left Side */
+  
   .profile-left {
     flex: 1;
-    background-color: #0c1733; /* Navy Blue */
+    background-color: #0c1733; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,7 +53,7 @@
     line-height: 1.5;
   }
   
-  /* Right Side */
+
   .profile-right {
     flex: 2;
     background-color: white;
@@ -74,7 +74,7 @@
     color: #222;
   }
   
-  /* Responsive Styling */
+  
   @media (max-width: 768px) {
     .profile-wrapper {
       flex-direction: column;

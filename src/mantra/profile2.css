@@ -1,4 +1,4 @@
-/* Profile.css */
+
 
 .profile-wrapper {
     display: flex;
@@ -8,10 +8,10 @@
     
   }
   
-  /* Left Side */
+  
 .profile-left {
     flex: 1;
-    background-color: #0c1733; /* Navy Blue */
+    background-color: #0c1733; 
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -30,7 +30,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent; /* No white background */
+    background-color: transparent; 
     
     padding: 0;
     margin: 0;
@@ -58,7 +58,7 @@
   
   
   
-  /* Right Side */
+  
 .profile-right {
     flex: 2;
     background-color: white;
@@ -79,7 +79,7 @@
     color: #222;
   }
   
-  /* Responsive Styling */
+ 
   @media (max-width: 768px) {
 .profile-wrapper {
       flex-direction: column;
