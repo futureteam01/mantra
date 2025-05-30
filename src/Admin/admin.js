@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   useEffect(() => {
   const fetchStaff = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users/users-all', {
+      const res = await axios.get('https://fusionbackend-iota.vercel.app/api/users/users-all', {
         withCredentials: true
       });
       setData(prev => ({
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/cases/all-cases', {
+        const res = await axios.get('https://fusionbackend-iota.vercel.app/pi/cases/all-cases', {
           withCredentials: true
           
         });
@@ -81,8 +81,8 @@ const AdminDashboard = () => {
   const handleSubmit = async (type) => {
     try {
       const endpoints = {
-        staff: 'http://localhost:5000/api/users/register',
-        case: 'http://localhost:5000/api/cases/create'
+        staff: 'https://fusionbackend-iota.vercel.app/api/users/register',
+        case: 'https://fusionbackend-iota.vercel.app/api/cases/create'
       };
   
       const loggedInUserId = localStorage.getItem('userId');
@@ -149,7 +149,7 @@ const AdminDashboard = () => {
 
   const deleteStaff = async (email) => {
     try {
-      await axios.delete(`http://localhost:5000/api/users/delete/${email}`, {
+      await axios.delete(`https://fusionbackend-iota.vercel.app/api/users/delete/${email}`, {
         withCredentials: true
       });
       setData(prev => ({
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
 
   const deleteCase = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cases/delete${id}`, { withCredentials: true });
+      await axios.delete(`https://fusionbackend-iota.vercel.app/api/cases/delete${id}`, { withCredentials: true });
 
       setData(prev => {
         const removedCase = prev.cases.find(c => c._id === id);

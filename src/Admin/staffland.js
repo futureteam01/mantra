@@ -26,7 +26,7 @@ const StaffDashboard = () => {
   useEffect(() => {
     const fetchCases = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/cases/case/:userId', {
+        const res = await axios.get('https://fusionbackend-iota.vercel.app/api/cases/case/:userId', {
           withCredentials: true
         });
         const cases = res.data;
@@ -63,7 +63,7 @@ const StaffDashboard = () => {
         userId: loggedInUserId
       };
 
-      const res = await axios.post('http://localhost:5000/api/cases/create', requestData, {
+      const res = await axios.post('https://fusionbackend-iota.vercel.app/api/cases/create', requestData, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true
       });
@@ -91,7 +91,7 @@ const StaffDashboard = () => {
 
   const deleteCase = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/cases/delete${id}`, { withCredentials: true });
+      await axios.delete(`https://fusionbackend-iota.vercel.app/api/cases/delete${id}`, { withCredentials: true });
       setData(prev => {
         const removedCase = prev.cases.find(c => c._id === id);
         const updatedCases = prev.cases.filter(c => c._id !== id);
