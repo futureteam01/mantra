@@ -1,6 +1,7 @@
 import React from 'react';
 import '../mantra/profile1.css';
 import profileImage from '../asset/girl.jpg'; 
+import BackButton from '../back/back';
 
 const Profile = () => {
   return (
@@ -41,6 +42,7 @@ const Profile = () => {
         </p>
         
       </div>
+      <BackButton />
     </div>
   );
 };

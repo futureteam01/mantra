@@ -1,6 +1,7 @@
 import React from "react";
 import '../contact/contact.css';
 import { useForm, ValidationError } from '@formspree/react';
+import BackButton from "../back/back";
 
 export default function ContactPage() {
   const [state, handleSubmit] = useForm("xanozpoo");
@@ -87,7 +88,9 @@ export default function ContactPage() {
             </button>
           </form>
         </div>
+        <BackButton />
       </div>
+      
     </div>
   );
 }

@@ -26,6 +26,7 @@ function AboutUs() {
           <a href="/practice">Practice Areas</a>
           <a href="/partners">Partners</a>
           <a href="/insight">Insight</a>
+          <a href="/testimonials">Testimonials</a>
           <a href="/csr">CSR</a>
           <button className="signin-btn" onClick={() => navigate('/staff')}>
             Sign In
@@ -65,51 +66,44 @@ function AboutUs() {
         </section>
       </div>
 
-      <footer className="footer-section">
-        <div className="footer-box left-box">
-          <h2>DO YOU NEED LEGAL HELP?</h2>
-          <p>Give us a call: +234 813 989 5245</p>
+      <footer className="footers">
+      <h2 className="footers-heading">Do You Need Legal Help?</h2>
+      <div className="footer-content">
+        <div className="footer-column">
+          <h4>Give Us A Call</h4>
+          <p>+2348149977915</p>
+          <p>+2348145137533</p>
         </div>
+        <div className="footer-column">
+          <h4>Email Us At</h4>
+          <p>ogundele676@gmail.com</p>
+          <p>mantraattorneys@gmail.com</p>
+        </div>
+        <div className="footer-column">
+          <h4>Visit Us At</h4>
+          <p>1st Chancery House, No. 5</p>
+          <p>C1 S Lekkie Estate Drive,</p>
+          <p>Lekki Phase 1, On the Core of Hill & Springkl Lagos.</p>
+        </div>
+      </div>
 
-        <div className="footer-box center-box">
-          <h2>&nbsp;</h2>
-          <p>Email us at: mantraattorneyslp@gmail.com</p>
-        </div>
+      <div className="footer-icons">
+        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <i className="fab fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <i className="fab fa-facebook"></i>
+        </a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+          <i className="fab fa-linkedin"></i>
+        </a>
+      </div>
 
-        <div className="footer-box right-box">
-          <h2>&nbsp;</h2>
-          <p>Visit us at: Suite A11 Murg Plaza, Area 10, Garki Abuja</p>
-        </div>
-
-        <div className="social-icons">
-          <a
-            href="https://www.instagram.com/mantraattorneys?igsh=MWc1enc2bXJ6MXhrcA=="
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="https://img.icons8.com/ios-glyphs/30/ffffff/instagram-new.png"
-              alt="Instagram"
-            />
-          </a>
-          <a
-            href="https://www.facebook.com/profile.php?id=61576712904817&mibextid=ZbWKwL"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="https://img.icons8.com/ios-glyphs/30/ffffff/facebook-new.png"
-              alt="Facebook"
-            />
-          </a>
-          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
-            <img
-              src="https://img.icons8.com/ios-glyphs/30/ffffff/linkedin.png"
-              alt="LinkedIn"
-            />
-          </a>
-        </div>
-      </footer>
+      <div className="footer-bottom">
+        <p>Copyright © 2025 Mantra Attorneys LP</p>
+        <p>Privacy Policy & Terms of Use</p>
+      </div>
+    </footer>
     </>
   );
 }

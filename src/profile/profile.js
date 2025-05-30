@@ -2,6 +2,7 @@
 import React from 'react';
 import '../profile/profile.css';
 import profileImage from '../asset/pro.jpg'; 
+import BackButton from '../back/back';
 
 const Profile = () => {
   return (
@@ -43,6 +44,7 @@ const Profile = () => {
           representation to clients in these areas.
         </p>
       </div>
+      <BackButton />
     </div>
   );
 };

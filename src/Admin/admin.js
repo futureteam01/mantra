@@ -27,7 +27,7 @@ const AdminDashboard = () => {
   useEffect(() => {
   const fetchStaff = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/auth/admins', {
+      const res = await axios.get('http://localhost:5000/api/users/users-all', {
         withCredentials: true
       });
       setData(prev => ({
@@ -81,24 +81,33 @@ const AdminDashboard = () => {
   const handleSubmit = async (type) => {
     try {
       const endpoints = {
-        staff: 'http://localhost:5000/api/auth/register',
-        case: 'http://localhost:5000/api/cases/create-new'
+        staff: 'http://localhost:5000/api/users/register',
+        case: 'http://localhost:5000/api/cases/create'
       };
-
+  
+      const loggedInUserId = localStorage.getItem('userId');
+  
+      if (type === 'case' && !loggedInUserId) {
+        toast.error('No user ID found. Please login again.');
+        return;
+      }
+  
       const requestData = type === 'staff'
         ? { ...formData.staff }
         : {
             title: formData.case.title,
             summary: formData.case.summary,
-            status: formData.case.status
+            status: formData.case.status,
+            userId: loggedInUserId
           };
-
+  
+      console.log('Submitting:', requestData); // 🪵 DEBUG
+  
       const res = await axios.post(endpoints[type], requestData, {
         headers: { 'Content-Type': 'application/json' },
-        withCredentials: true,
-        
+        withCredentials: true
       });
-
+  
       setData(prev => {
         if (type === 'staff') {
           return {
@@ -108,37 +117,39 @@ const AdminDashboard = () => {
           };
         } else {
           const updatedStats = { ...prev.stats, totalCases: prev.stats.totalCases + 1 };
-          if (res.data.status === 'open') updatedStats.open += 1;
-          else if (res.data.status === 'closed') updatedStats.closed += 1;
-          else if (res.data.status === 'further action') updatedStats.furtherAction += 1;
-
+          if (res.data.case.status === 'open') updatedStats.open += 1;
+          else if (res.data.case.status === 'closed') updatedStats.closed += 1;
+          else if (res.data.case.status === 'further action') updatedStats.furtherAction += 1;
+  
           return {
             ...prev,
-            cases: [...prev.cases, res.data],
+            cases: [...prev.cases, res.data.case],
             stats: updatedStats
           };
         }
       });
-
+  
       setFormData(prev => ({
         ...prev,
         [type]: type === 'staff'
           ? { email: '', password: '', role: 'staff' }
           : { title: '', summary: '', status: 'open' }
       }));
-
+  
       toast.success(`${type.charAt(0).toUpperCase() + type.slice(1)} created successfully!`);
     } catch (error) {
+      console.error('Submit error:', error); // 🪵 DEBUG
       const errorMessage = error.response?.data?.message || 
                            error.response?.data?.error ||
                            'Error creating record';
       toast.error(errorMessage);
     }
   };
+  
 
   const deleteStaff = async (email) => {
     try {
-      await axios.delete(`http://localhost:5000/api/auth/delete/${email}`, {
+      await axios.delete(`http://localhost:5000/api/users/delete/${email}`, {
         withCredentials: true
       });
       setData(prev => ({

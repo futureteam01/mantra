@@ -1,6 +1,7 @@
 import React from 'react';
 import '../mantra/profile1.css';
 import profileImage from '../asset/prof.jpg'; 
+import BackButton from '../back/back';
 
 const Profile = () => {
   return (
@@ -42,6 +43,7 @@ const Profile = () => {
           reputation as a trusted and reliable legal advisor.
         </p>
       </div>
+      <BackButton />
     </div>
   );
 };

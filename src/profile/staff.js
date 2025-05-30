@@ -7,6 +7,7 @@ import logo from '../asset/Mn11.png';
 import balanceImage from '../asset/lagos.jpg';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import BackButton from '../back/back';
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -28,13 +29,17 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/login', formData);
+      const res = await axios.post('http://localhost:5000/api/auth/login', formData);
+  
+      localStorage.setItem('userId', res.data.user._id);
+  
       toast.success('Login successful!');
       navigate('/admin');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed. Please try again.');
     }
   };
+  
 
   const togglePassword = () => {
     setPasswordVisible(!passwordVisible);
@@ -44,8 +49,12 @@ function Signup() {
     <div className="signup-container">
       <div className="left-section">
         <div className="overlay">
-          <img src={logo} alt="Mantra Attorneys LP" className="logo" />
-          <h1 className="brand-text">MANTRA<br />ATTORNEYS LP</h1>
+        <div style={{ position: "absolute", top: "0", left: "0", display: "flex", alignItems: "center", padding: "10px" }}>
+        <img src={logo} alt="Mantra Attorneys LP" style={{ height: "50px", marginRight: "10px" }} />
+          <h1 style={{ margin: 0, fontSize: "1.2rem", lineHeight: "1.2" }}>
+          MANTRA<br />ATTORNEYS LP
+        </h1>
+        </div>
         </div>
         <img src={balanceImage} alt="Balance Scales" className="background-img" />
       </div>
@@ -53,7 +62,8 @@ function Signup() {
       <div className="right-section">
         <div className="form-box">
           <div className="top-right-heading">
-            {/* <a href="/signin" className="admin-link-btn"></a> */}
+            <a href="/signin" className="admin-link-btn">Staff Login</a>
+             
           </div>
           <h2>Admin Login</h2>
           <form onSubmit={handleSubmit}>
@@ -89,6 +99,7 @@ function Signup() {
         </div>
       </div>
       <ToastContainer />
+      <BackButton />
     </div>
   );
 }
