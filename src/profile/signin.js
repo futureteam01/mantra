@@ -27,7 +27,7 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://fusionbackend-iota.vercel.app/api/users/login', formData);
+      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/login`, formData);
   
       localStorage.setItem('userId', res.data.user._id);
   
