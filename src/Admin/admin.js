@@ -95,7 +95,8 @@ const AdminDashboard = () => {
 
       const res = await axios.post(endpoints[type], requestData, {
         headers: { 'Content-Type': 'application/json' },
-        withCredentials: true
+        withCredentials: true,
+        
       });
 
       setData(prev => {
@@ -137,7 +138,7 @@ const AdminDashboard = () => {
 
   const deleteStaff = async (email) => {
     try {
-      await axios.delete(`http://localhost:5000/api/auth/staff/${email}`, {
+      await axios.delete(`http://localhost:5000/api/auth/delete/${email}`, {
         withCredentials: true
       });
       setData(prev => ({
